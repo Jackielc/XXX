@@ -11,34 +11,17 @@ const styles = StyleSheet.create({
 });
 
 export default class Find extends Component {
-    static navigationOptions = {
-        title: 'Find'
-    };
     constructor(props) {
         super(props);
         this.state = {
-            text: "你好",
-            navigate: this.props.navigation.navigate
+            text: "Find",
         }
     }
-    onPress = () => {
-        this.state.navigate("List",
-            {
-                data: "你好",
-                callback: (data) => {
-                    this.setState({text: data});
-                }
-            });
-    };
-    
     render() {
         const {text} = this.state;
         return (
             <View style={styles.contain}>
-                <Button
-                    title={''}
-                    onPress={this.onPress}
-                />
+             
             </View>
         );
     }
