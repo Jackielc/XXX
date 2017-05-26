@@ -14,7 +14,6 @@ import {
     TouchableNativeFeedback,
     Text,
     Dimensions,
-    Swiper,
     Image,
     TouchableOpacity
 } from "react-native";
@@ -22,6 +21,7 @@ import {
 import px2dp from '../screenPx'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Images from '../images'
+import Swiper from 'react-native-swiper'
 
 const isIOS = Platform.OS == "ios"
 const headH = px2dp(isIOS ? 140 : 120)
@@ -87,28 +87,24 @@ export default class Lucky extends Component {
         )
     }
 
-    _renderClassify() {
-        const itemWidth = width / 4, itemHeight = itemWidth;
-        let renderCollectionView = (types, n) => {
+    _renderTypes() {
+        const w = width / 4, h = w * .6 + 20
+        let renderSwipeView = (types, n) => {
             return (
                 <View style={styles.collectionView}>
                     {
-                        types.map((item, index) => {
+                        types.map((item, i) => {
                             let render = (
-                                <View style={[{ width: itemWidth, height: itemHeight }]}>
-                                    <Image source={Images['h' + (index + n)]} style={{ width: itemWidth * .5, height: itemHeight * .5 }} />
-                                    <Text style={{ fontSize: px2dp(12), color: '#6666' }}>{item}</Text>
+                                <View style={[{ width: w, height: h }, styles.collectionViewCell]}>
+                                    <Image source={Images['h' + (i + n)]} style={{ width: w * .5, height: w * .5 }} />
+                                    <Text style={{ fontSize: px2dp(12), color: "#666" }}>{item}</Text>
                                 </View>
                             )
                             return (
                                 isIOS ? (
-                                    <TouchableHighlight style={{ width: itemWidth, height: itemHeight }} key={index} onPress={() => { }}>
-                                        {render}
-                                    </TouchableHighlight>
+                                    <TouchableHighlight style={{ width: w, height: h }} key={i} onPress={() => { }}>{render}</TouchableHighlight>
                                 ) : (
-                                        <TouchableNativeFeedback style={{ width: itemWidth, height: itemHeight }} key={index} onPress={() => { }}>
-                                            {render}
-                                        </TouchableNativeFeedback>
+                                        <TouchableNativeFeedback style={{ width: w, height: h }} key={i} onPress={() => { }}>{render}</TouchableNativeFeedback>
                                     )
                             )
                         })
@@ -118,12 +114,12 @@ export default class Lucky extends Component {
         }
         return (
             <Swiper
-                height={itemHeight * 2.4}
+                height={h * 2.4}
                 paginationStyle={{ bottom: 10 }}
                 dotStyle={{ backgroundColor: 'rgba(0,0,0,.2)', width: 6, height: 6 }}
                 activeDotStyle={{ backgroundColor: 'rgba(0,0,0,.5)', width: 6, height: 6 }}>
-                {renderCollectionView(['美食', '甜品饮品', '商店超市', '预定早餐', '果蔬生鲜', '新店特惠', '准时达', '高铁订餐'], 0)}
-                {renderCollectionView(['土豪推荐', '鲜花蛋糕', '汉堡炸鸡', '日韩料理', '麻辣烫', '披萨意面', '川湘菜', '包子粥店'], 8)}
+                {renderSwipeView(['美食', '甜品饮品', '商店超市', '预定早餐', '果蔬生鲜', '新店特惠', '准时达', '高铁订餐'], 0)}
+                {renderSwipeView(['土豪推荐', '鲜花蛋糕', '汉堡炸鸡', '日韩料理', '麻辣烫', '披萨意面', '川湘菜', '包子粥店'], 8)}
             </Swiper>
         )
     }
@@ -146,7 +142,7 @@ export default class Lucky extends Component {
                 >
                     {this._renderHeader()}
                     <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
-                        {this._renderClassify()}
+                        {this._renderTypes()}
                         <TouchableOpacity>
                             <View style={{ height: px2dp(90), paddingHorizontal: 10 }}>
                                 <Image source={Images.ad1} style={{ height: px2dp(90), width: width - 20, resizeMode: 'cover' }} />
@@ -199,8 +195,13 @@ const styles = StyleSheet.create({
     collectionView: {
         paddingBottom: 10,
         flex: 1,
-        backgroundColor: '#fff',
-        flexDirection: 'row',
-        flexWrap: 'wrap'//换行
-    }
+        backgroundColor: "#fff",
+        flexDirection: "row",
+        flexWrap: "wrap"//换行
+    },
+    collectionViewCell: {
+        backgroundColor: "#fff",
+        justifyContent: "center",
+        alignItems: "center"
+    },
 });
