@@ -18,12 +18,12 @@ import {
     TouchableOpacity
 } from "react-native";
 
-import px2dp from '../screenPx'
+import px2dp from '../pliers/screenPx'
 import Icon from 'react-native-vector-icons/Ionicons'
-import Images from '../images'
+import Images from '../pliers/images'
 import Swiper from 'react-native-swiper'
-import Rank from '../rank'
-import data from '../virtualData'
+import Rank from '../pliers/rank'
+import data from '../pliers/virtualData'
 
 const isIOS = Platform.OS == "ios"
 const headH = px2dp(isIOS ? 140 : 120)
