@@ -22,6 +22,8 @@ import px2dp from '../screenPx'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Images from '../images'
 import Swiper from 'react-native-swiper'
+import Rank from '../rank'
+import data from '../virtualData'
 
 const isIOS = Platform.OS == "ios"
 const headH = px2dp(isIOS ? 140 : 120)
@@ -42,6 +44,63 @@ export default class Lucky extends Component {
         setTimeout(() => {
             this.setState({ isRefreshing: false })
         }, 2000)
+    }
+
+    render() {
+        const { text } = this.state;
+        return (
+            <View style={styles.contain}>
+                <ScrollView
+                    styles={styles.scrollView}
+                    scrollEventThrottle={16}//每秒触发ScrollView的事件16次
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            colors={['#ddd', '#0398ff']}//a
+                            onRefresh={this._onRefresh.bind(this)}
+                            progressBackgroundColor='black'//a
+                        />
+                    }
+                >
+                    {this._renderHeader()}
+                    <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
+                        {this._renderTypes()}
+                        <TouchableOpacity>
+                            <View style={{ height: px2dp(90), paddingHorizontal: 10 }}>
+                                <Image source={Images.ad1} style={{ height: px2dp(90), width: width - 20, resizeMode: 'cover' }} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
+                    {/*#pragma mark - ('热门区域')*/}
+
+                    <View style={styles.hotView}>
+                        {this._rendHot()}
+                    </View>
+
+                    {/*#pragma mark - ('抢购')*/}
+                    <View style={styles.card}>
+                        {this._renderSaleTime()}
+                    </View>
+
+                    {/*#pragma mark - ('')*/}
+                    <View style={styles.card}>
+                        {this._renderFamous()}
+                    </View>
+
+                    {/*#pragma mark - ('')*/}
+                    <View style={styles.card}>
+                        {this._renderGift()}
+                    </View>
+
+                    {/*#pragma mark - ('')*/}
+                    <View style={styles.card}>
+                        {this._renderRank()}
+                    </View>
+
+                </ScrollView>
+            </View>
+        );
     }
 
     _renderHeader() { //头部
@@ -124,34 +183,165 @@ export default class Lucky extends Component {
         )
     }
 
-    render() {
-        const { text } = this.state;
+    _rendHot() {
+        return ['热门宝贝', '返幸运币', '双倍竞猜', '免费送'].map((title, index) => {
+            let sty = {
+                0: {
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#f9f9f9',
+                    borderRightWidth: 1,
+                    borderRightColor: '#f9f9f9'
+                },
+                1: {
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#f9f9f9'
+                },
+                2: {
+                    borderRightWidth: 1,
+                    borderRightColor: '#f9f9f9'
+                },
+                3: {}
+            }
+            let _render = (index) => {
+                return (
+                    <View style={styles.hotWarpper}>
+                        <View>
+                            <Text style={{ fontSize: px2dp(14), color: '#333', marginBottom: 5 }}>{title}</Text>
+                            <Text style={{ fontSize: px2dp(12), color: '#bbb' }}>{title}</Text>
+                        </View>
+                        <Image source={Images['hot' + index]} style={{ width: 50, height: 50, resizeMode: 'contain' }} />
+                    </View>
+                )
+            }
+            return isIOS ? (
+                <View key={index} style={[styles.hotItem, sty[index], { backgroundColor: '#f5f5f5' }]}>
+                    <TouchableHighlight style={{ flex: 1 }} onPress={() => { }}>{_render(index)}
+                    </TouchableHighlight>
+                </View>
+            ) : (
+                    <View key={index} style={[styles.hotItem, sty[index]]}>
+                        <TouchableNativeFeedback style={{ flex: 1, height: 70 }}>{_render(index)}
+                        </TouchableNativeFeedback>
+                    </View>
+                )
+        })
+    }
+
+    _renderSaleTime() {
         return (
-            <View style={styles.contain}>
+            <View>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{ fontSize: px2dp(14), fontWeight: "bold" }}>马上开奖</Text>
+                        <Text style={{ fontSize: px2dp(11), color: "#aaa", marginLeft: 10 }}>距离开奖</Text>
+                        <Text style={styles.time}>01</Text>
+                        <Text style={{ fontSize: px2dp(11), color: "#aaa" }}>:</Text>
+                        <Text style={styles.time}>07</Text>
+                        <Text style={{ fontSize: px2dp(11), color: "#aaa" }}>:</Text>
+                        <Text style={styles.time}>10</Text>
+                    </View>
+                    <TouchableOpacity>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Text style={{ fontSize: px2dp(12), color: "#aaa", marginRight: 3 }}>更多</Text>
+                            <Icon name="ios-arrow-forward-outline" size={px2dp(13)} color="#bbb" />
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView
-                    styles={styles.scrollView}
-                    scrollEventThrottle={16}//每秒触发ScrollView的事件16次
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.isRefreshing}
-                            colors={['#ddd', '#0398ff']}//a
-                            onRefresh={this._onRefresh.bind(this)}
-                            progressBackgroundColor='black'//a
-                        />
-                    }
-                >
-                    {this._renderHeader()}
-                    <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
-                        {this._renderTypes()}
-                        <TouchableOpacity>
-                            <View style={{ height: px2dp(90), paddingHorizontal: 10 }}>
-                                <Image source={Images.ad1} style={{ height: px2dp(90), width: width - 20, resizeMode: 'cover' }} />
-                            </View>
-                        </TouchableOpacity>
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    horizontal={true}>
+                    <View style={{ flexDirection: "row", alignItems: "center", paddingTop: 15 }}>
+                        {
+                            ["iPhone7", "佳能600D", "AdidasZ50", "哈佛H7"].map((item, i) => {
+                                let layout = (
+                                    <View style={{ backgroundColor: '#fff', alignItems: 'center' }}>
+                                        <Image source={Images["sale" + i]} style={{ height: px2dp(85), width: px2dp(85), resizeMode: 'cover' }} />
+                                        <Text style={{ fontSize: px2dp(13), color: "#333", marginVertical: 5 }}>{item}</Text>
+                                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                            <Text style={{ fontSize: px2dp(14), fontWeight: "bold", color: "#ff6000", marginRight: 2 }}>{"￥99"}</Text>
+                                            <Text style={{ fontSize: px2dp(12), color: "#aaa", textDecorationLine: "line-through" }}>{"￥29"}</Text>
+                                        </View>
+                                    </View>
+                                )
+                                return isIOS ? (
+                                    <TouchableHighlight key={i} style={{ borderRadius: 4, marginRight: 10 }} onPress={() => { }}>{layout}</TouchableHighlight>
+                                ) : (
+                                        <View key={i} style={{ marginRight: 10 }}><TouchableNativeFeedback onPress={() => { }}>{layout}</TouchableNativeFeedback></View>
+                                    )
+                            })
+                        }
                     </View>
                 </ScrollView>
             </View>
-        );
+        )
+    }
+
+    _renderFamous() {
+        return (
+            <View>
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                    <Text style={{ fontSize: px2dp(14), fontWeight: "bold" }}>品质优选</Text>
+                    <TouchableOpacity>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Text style={{ fontSize: px2dp(12), color: "#aaa", marginRight: 3 }}>更多</Text>
+                            <Icon name="ios-arrow-forward-outline" size={px2dp(13)} color="#bbb" />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", paddingTop: 15 }}>
+                    {
+                        ["田老师红烧肉", "必胜宅急送", "嘉和一品", "西贝莜面村", "宏状元", "汉拿山韩式石锅拌饭", "U鼎冒菜", "阿香米线"].map((item, i) => {
+                            let size = px2dp((width - px2dp(120)) / 4)
+                            let layout = (
+                                <View style={{ backgroundColor: "#fff", alignItems: "center" }}>
+                                    <Image source={Images["nice" + i]} style={{ height: size, width: size, resizeMode: 'cover' }} />
+                                    <Text numberOfLines={1} style={{ fontSize: px2dp(12), width: size, color: "#333", marginVertical: 5 }}>{item}</Text>
+                                    <Text numberOfLines={1} style={styles.qtag}>{"大牌精选"}</Text>
+                                </View>
+                            )
+                            return isIOS ? (
+                                <View key={i} style={{ borderRadius: 4, marginRight: 10, paddingTop: i > 3 ? 30 : 0 }}><TouchableHighlight onPress={() => { }}>{layout}</TouchableHighlight></View>
+                            ) : (
+                                    <View key={i} style={{ marginRight: 10, paddingTop: i > 3 ? 30 : 0 }}><TouchableNativeFeedback onPress={() => { }}>{layout}</TouchableNativeFeedback></View>
+                                )
+                        })
+                    }
+                </View>
+            </View>
+        )
+    }
+    _renderGift() {
+        return (
+            <View style={{ flexDirection: "row" }}>
+                <View style={[styles.gift, { paddingRight: 16 }]}>
+                    <View>
+                        <Text style={{ fontWeight: "bold" }}>{"推荐有奖"}</Text>
+                        <Text style={{ fontSize: 12, color: "#aaa", marginTop: 5 }}>{"幸运币拿不停"}</Text>
+                    </View>
+                    <Image source={Images.coupon0} style={{ height: 50, width: 50, resizeMode: 'cover' }} />
+                </View>
+                <View style={[styles.gift, { borderLeftColor: "#f5f5f5", borderLeftWidth: 1, paddingLeft: 16 }]}>
+                    <View>
+                        <Text style={{ fontWeight: "bold" }}>{"任务中心"}</Text>
+                        <Text style={{ fontSize: 12, color: "#aaa", marginTop: 5 }}>{"快来赚幸运币!"}</Text>
+                    </View>
+                    <Image source={Images.coupon1} style={{ height: 50, width: 50, resizeMode: 'cover' }} />
+                </View>
+            </View>
+        )
+    }
+
+    _renderRank() {
+        return data.list.map((item, i) => {
+            item.onPress = () => {
+                this.props.navigator.push({
+                    component: DetailPage,
+                    args: {}
+                })
+            }
+            return (<Rank {...item} key={i} />)
+        })
     }
 }
 
@@ -161,7 +351,7 @@ const styles = StyleSheet.create({
         ios: { flex: 1, justifyContent: 'flex-end', backgroundColor: '#f3f3f3' },
     }),
     scrollView: {
-        marginBottom: 46
+        marginBottom: px2dp(46)
     },
     header: {
         backgroundColor: '#0398ff',
@@ -203,5 +393,47 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center"
+    },
+    hotWarpper: {
+        flex: 1,
+        height: 70,
+        paddingHorizontal: 16,
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    hotItem: {
+        width: width / 2,
+        height: width / 2 / 2,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    hotView: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        marginTop: 10,
+        flexWrap: 'wrap'
+    },
+    card: {
+        backgroundColor: "#fff",
+        marginTop: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 16
+    },
+    saleTime: {
+        paddingHorizontal: 3,
+        backgroundColor: '#333',
+        fontSize: px2dp(11),
+        color: '#fff',
+        marginHorizontal: 3
+    },
+    gift: {
+        flex: 1,
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexDirection: "row",
+        backgroundColor: "#fff"
     },
 });
