@@ -24,6 +24,7 @@ import Images from '../pliers/images'
 import Swiper from 'react-native-swiper'
 import Rank from '../pliers/rank'
 import data from '../pliers/virtualData'
+import DetailPage from './detailscreen'
 
 const isIOS = Platform.OS == "ios"
 const headH = px2dp(isIOS ? 140 : 120)
@@ -52,7 +53,7 @@ export default class Lucky extends Component {
             <View style={styles.contain}>
                 <ScrollView
                     styles={styles.scrollView}
-                    scrollEventThrottle={16}//每秒触发ScrollView的事件16次
+                    scrollEventThrottle={16}//每秒触发ScrollView事件流16次,防止占用内存
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.isRefreshing}
@@ -73,7 +74,6 @@ export default class Lucky extends Component {
                     </View>
 
                     {/*#pragma mark - ('热门区域')*/}
-
                     <View style={styles.hotView}>
                         {this._rendHot()}
                     </View>
@@ -84,9 +84,9 @@ export default class Lucky extends Component {
                     </View>
 
                     {/*#pragma mark - ('')*/}
-                    <View style={styles.card}>
+                    {/*<View style={styles.card}>
                         {this._renderFamous()}
-                    </View>
+                    </View>*/}
 
                     {/*#pragma mark - ('')*/}
                     <View style={styles.card}>
@@ -148,6 +148,7 @@ export default class Lucky extends Component {
 
     _renderTypes() {
         const w = width / 4, h = w * .6 + 20
+        let imgs = ['bird','camera','computer','car','watch','phone','money','gold','card','food','bed','sofa','clothes','shoe']
         let renderSwipeView = (types, n) => {
             return (
                 <View style={styles.collectionView}>
@@ -155,8 +156,8 @@ export default class Lucky extends Component {
                         types.map((item, i) => {
                             let render = (
                                 <View style={[{ width: w, height: h }, styles.collectionViewCell]}>
-                                    <Image source={Images['h' + (i + n)]} style={{ width: w * .5, height: w * .5 }} />
-                                    <Text style={{ fontSize: px2dp(12), color: "#666" }}>{item}</Text>
+                                    <Image source={Images[n>0?imgs[8+i]:imgs[i]]} style={{ width: w * .5, height: w * .5,marginTop:5}} resizeMode='contain' />
+                                    <Text style={{ fontSize: px2dp(12), color: "#666",marginTop:8}}>{item}</Text>
                                 </View>
                             )
                             return (
@@ -177,14 +178,14 @@ export default class Lucky extends Component {
                 paginationStyle={{ bottom: 10 }}
                 dotStyle={{ backgroundColor: 'rgba(0,0,0,.2)', width: 6, height: 6 }}
                 activeDotStyle={{ backgroundColor: 'rgba(0,0,0,.5)', width: 6, height: 6 }}>
-                {renderSwipeView(['美食', '甜品饮品', '商店超市', '预定早餐', '果蔬生鲜', '新店特惠', '准时达', '高铁订餐'], 0)}
-                {renderSwipeView(['土豪推荐', '鲜花蛋糕', '汉堡炸鸡', '日韩料理', '麻辣烫', '披萨意面', '川湘菜', '包子粥店'], 8)}
+                {renderSwipeView(['官方推荐', '单反', '电脑', '汽车', '手表', '手机', '现金', '金银制品'], 0)}
+                {renderSwipeView(['充值卡', '零食', '床上用品', '家具', '服饰', '鞋子'], 6)}
             </Swiper>
         )
     }
 
     _rendHot() {
-        return ['热门宝贝', '返幸运币', '双倍竞猜', '免费送'].map((title, index) => {
+        return ['热门宝贝', '返幸运币', '多倍竞猜', '苹果专区'].map((title, index) => {
             let sty = {
                 0: {
                     borderBottomWidth: 1,
@@ -232,8 +233,8 @@ export default class Lucky extends Component {
             <View>
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Text style={{ fontSize: px2dp(14), fontWeight: "bold" }}>马上开奖</Text>
-                        <Text style={{ fontSize: px2dp(11), color: "#aaa", marginLeft: 10 }}>距离开奖</Text>
+                        <Text style={{ fontSize: px2dp(14), fontWeight: "bold" }}>马上揭晓</Text>
+                        <Text style={{ fontSize: px2dp(11), color: "#aaa", marginLeft: 10 }}>距离揭晓</Text>
                         <Text style={styles.time}>01</Text>
                         <Text style={{ fontSize: px2dp(11), color: "#aaa" }}>:</Text>
                         <Text style={styles.time}>07</Text>

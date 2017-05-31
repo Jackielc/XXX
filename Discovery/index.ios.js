@@ -4,5 +4,5 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import Discovery from './vc/warpper'
+import Discovery from './component/warpper'
 AppRegistry.registerComponent('Discovery', () => Discovery);

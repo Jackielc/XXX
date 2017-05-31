@@ -1,14 +1,9 @@
 "use strict"
 
-// import Home from './homescreen'
-// import Find from './findscreen'
-// import Person from './personscreen'
-// import Push from './push'
-
 import React, { Component } from 'react'
 import { View, StatusBar, Platform, Text } from 'react-native'
 import { Navigator } from 'react-native-deprecated-custom-components'
-import ScrollView from './tabbarcontroller'
+import TableViewController from '../vc/tabbarcontroller'
 
 export default class Navigation extends Component {
     constructor(prop) {
@@ -21,7 +16,7 @@ export default class Navigation extends Component {
                 configureScene={() => Navigator.SceneConfigs.FloatFromRight}
                 renderScene={(route, navigator) => {
                     return <route.component navigator={navigator} {...route.args} />
-                  }
+                }
                 }
             />
         ) : ( //andriod
@@ -35,7 +30,7 @@ export default class Navigation extends Component {
                         configureScene={() => Navigator.SceneConfigs.FloatFromRight}
                         renderScene={(route, navigator) => {
                             return <route.component navigator={navigator} {...route.args} />
-                          }
+                        }
                         }
                     />
                 </View>
@@ -49,8 +44,8 @@ class Warpper extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'flex-end' ,backgroundColor:'lightgray'}}>
-                <ScrollView navigator={this.props.navigator}/>
+            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'lightgray' }}>
+                <TableViewController navigator={this.props.navigator} />
             </View>
         )
     }
