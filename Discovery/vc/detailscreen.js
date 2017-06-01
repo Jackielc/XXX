@@ -112,7 +112,7 @@ export default class Detail extends Component {
     render() {
         const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         return (<View style={styles.contain}>
-            <NavigationBar style={{ backgroundColor: "transparent" }} leftImage={Images.back} leftAction={this.back.bind(this)} />
+            <NavigationBar style={{ backgroundColor: "#fff" }} leftImage={Images.back} leftAction={this.back.bind(this)} />
             <ScrollView
                 scrollEventThrottle={16}
                 refreshControl={
