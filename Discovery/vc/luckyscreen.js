@@ -15,14 +15,15 @@ import {
     Text,
     Dimensions,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    ListView
 } from "react-native";
 
 import px2dp from '../pliers/screenPx'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Images from '../pliers/images'
 import Swiper from 'react-native-swiper'
-import Rank from '../pliers/rank'
+import Rank from '../component/rank'
 import data from '../pliers/virtualData'
 import DetailPage from './detailscreen'
 
@@ -148,7 +149,7 @@ export default class Lucky extends Component {
 
     _renderTypes() {
         const w = width / 4, h = w * .6 + 20
-        let imgs = ['bird','camera','computer','car','watch','phone','money','gold','card','food','bed','sofa','clothes','shoe']
+        let imgs = ['bird', 'camera', 'computer', 'car', 'watch', 'phone', 'money', 'gold', 'card', 'food', 'bed', 'sofa', 'clothes', 'shoe']
         let renderSwipeView = (types, n) => {
             return (
                 <View style={styles.collectionView}>
@@ -156,8 +157,8 @@ export default class Lucky extends Component {
                         types.map((item, i) => {
                             let render = (
                                 <View style={[{ width: w, height: h }, styles.collectionViewCell]}>
-                                    <Image source={Images[n>0?imgs[8+i]:imgs[i]]} style={{ width: w * .5, height: w * .5,marginTop:5}} resizeMode='contain' />
-                                    <Text style={{ fontSize: px2dp(12), color: "#666",marginTop:8}}>{item}</Text>
+                                    <Image source={Images[n > 0 ? imgs[8 + i] : imgs[i]]} style={{ width: w * .5, height: w * .5, marginTop: 5 }} resizeMode='contain' />
+                                    <Text style={{ fontSize: px2dp(12), color: "#666", marginTop: 8 }}>{item}</Text>
                                 </View>
                             )
                             return (
@@ -334,15 +335,22 @@ export default class Lucky extends Component {
     }
 
     _renderRank() {
-        return data.list.map((item, i) => {
-            item.onPress = () => {
+        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+        let renderRow = (rowData, SectionId, rowID) => {
+            rowData.onPress = () => {
                 this.props.navigator.push({
                     component: DetailPage,
                     args: {}
                 })
             }
-            return (<Rank {...item} key={i} />)
-        })
+            return (
+                <Rank {...rowData} />
+            )
+        }
+        return <ListView
+            dataSource={ds.cloneWithRows(data.list)}
+            renderRow={renderRow.bind(this)}
+            enableEmptySections={true} />
     }
 }
 

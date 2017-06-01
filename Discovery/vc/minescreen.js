@@ -73,12 +73,12 @@ export default class Mine extends Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
-                <NavigationBar
+                {/*<NavigationBar
                     leftIcon='ios-notifications-outline'
                     leftPress={this.leftIconPress.bind(this)}
                     rightIcon='ios-settings-outline'
                     rightPress={this.rightIconPress.bind(this)}
-                />
+                />*/}
                 <ScrollView
                     style={{ flex: 1, backgroundColor: '#f3f3f3' }}
                     refreshControl={

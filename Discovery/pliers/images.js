@@ -62,4 +62,9 @@ export default {
   imac2: require('./imagefile/imac2.jpg'),
   imac3: require('./imagefile/imac3.jpg'),
 
+  back: require('./imagefile/back_normal.png'),
+
+  one: require('./imagefile/1.jpg'),
+  two: require('./imagefile/2.jpg'),
+  three: require('./imagefile/3.jpg'),
 }

@@ -1,100 +1,113 @@
 
 'use strict';
-
-import React, {
-  Component,
-  PropTypes
-} from 'react'
+import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
-  Animated,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform
-} from 'react-native'
-import px2dp from '../pliers/screenPx'
-import Icon from 'react-native-vector-icons/Ionicons'
+  Image,
+  StyleSheet,
+  Platform,
+  TouchableOpacity
+} from 'react-native';
 
-export default class NavBar extends Component{
-    static propTypes = {
-        title: PropTypes.string,
-        leftIcon: PropTypes.string,
-        rightIcon: PropTypes.string,
-        leftPress: PropTypes.func,
-        rightPress: PropTypes.func,
-        style: PropTypes.object
-    }
-    static topbarHeight = (Platform.OS === 'ios' ? 64 : 42)
-    renderBtn(pos){
-      let render = (obj) => {
-        const { name, onPress } = obj
-        if(Platform.OS === 'android'){
-          return (
-            <TouchableNativeFeedback onPress={onPress} style={styles.btn}>
-              <Icon name={name} size={px2dp(26)} color="#fff" />
-            </TouchableNativeFeedback>
-          )
-        }else{
-          return (
-            <TouchableOpacity onPress={onPress} style={styles.btn}>
-              <Icon name={name} size={px2dp(26)} color="#fff" />
-            </TouchableOpacity>
-          )
-        }
-      }
-      if(pos == "left"){
-        if(this.props.leftIcon){
-          return render({
-            name: this.props.leftIcon,
-            onPress: this.props.leftPress
-          })
-        }else{
-          return (<View style={styles.btn}></View>)
-        }
-      }else if(pos == "right"){
-        if(this.props.rightIcon){
-          return render({
-            name: this.props.rightIcon,
-            onPress: this.props.rightPress
-          })
-        }else{
-          return (<View style={styles.btn}></View>)
-        }
-      }
-    }
-    render(){
-        return(
-            <View style={[styles.topbar, this.props.style]}>
-                {this.renderBtn("left")}
-                <Animated.Text numberOfLines={1} style={[styles.title, this.props.titleStyle]}>{this.props.title}</Animated.Text>
-                {this.renderBtn("right")}
-            </View>
-        )
-    }
+import px2dp from '../pliers/screenPx'
+
+class NavigationBar extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    // leftTitle和leftImage 优先判断leftTitle (即 文本按钮和图片按钮优先显示文本按钮)
+    const { title, leftTitle, leftImage, leftAction, rightTitle, rightImage, rightAction } = this.props;
+    return (
+      <View style={[styles.barView, this.props.style]}>
+        <View style={styles.showView}>
+          {
+            leftTitle
+              ?
+              <TouchableOpacity style={styles.leftNav} onPress={() => { leftAction() }}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.barButton}>{leftTitle}</Text>
+                </View>
+              </TouchableOpacity>
+              :
+              (
+                leftImage
+                  ?
+                  <TouchableOpacity style={styles.leftNav} onPress={() => { leftAction() }}>
+                    <View style={{ alignItems: 'center' }}>
+                      <Image source={leftImage} style={{width:px2dp(26),height:px2dp(26)}}/>
+                    </View>
+                  </TouchableOpacity>
+                  : null
+              )
+          }
+          {
+            title ?
+              <Text style={styles.title}>{title || ''}</Text>
+              : null
+          }
+          {
+            rightTitle ?
+              <TouchableOpacity style={styles.rightNav} onPress={() => { rightAction() }}>
+                <View style={{ alignItems: 'center' }}>
+                  <Text style={styles.barButton}>{rightTitle}</Text>
+                </View>
+              </TouchableOpacity>
+              : (rightImage ?
+                <TouchableOpacity style={styles.rightNav} onPress={() => { rightAction() }}>
+                  <View style={{ alignItems: 'center' }}>
+                    <Image source={rightImage} style={{width:px2dp(26),height:px2dp(26)}} />
+                  </View>
+                </TouchableOpacity>
+                : null
+              )
+          }
+
+        </View>
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
-    topbar: {
-        height: NavBar.topbarHeight,
-        backgroundColor: "#0398ff",
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: (Platform.OS === 'ios') ? 20 : 0,
-        paddingHorizontal: px2dp(10)
-    },
-    btn: {
-      width: 40,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    title:{
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: px2dp(16),
-        marginLeft: px2dp(5),
-    }
-});
+  barView: {
+    height: Platform.OS === 'android' ? 44 : 64,
+    backgroundColor: '#0398ff',
+  },
+  showView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: Platform.OS === 'android' ? 0 : 20,
+    height: 44,
+  },
+  title: {
+    color: 'white',
+    fontSize: 18.0,
+  },
+  leftNav: {
+    position: 'absolute',
+    top: 8,
+    bottom: 8,
+    left: 8,
+    justifyContent: 'center',
+  },
+  rightNav: {
+    position: 'absolute',
+    right: 8,
+    top: 8,
+    bottom: 8,
+    justifyContent: 'center',
+  },
+  barButton: {
+    color: 'white',
+    fontSize: 18
+  },
+})
+
+
+
+export default NavigationBar
