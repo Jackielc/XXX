@@ -10,6 +10,7 @@
     "@exponent/react-native-navigator": "^0.4.9",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
+    "react-native-actionsheet": "^2.1.0",
     "react-native-router-flux": "^3.38.0",
     "react-native-swiper": "^1.5.4",
     "react-native-tab-navigator": "^0.3.3",

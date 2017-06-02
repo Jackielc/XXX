@@ -67,4 +67,9 @@ export default {
   one: require('./imagefile/1.jpg'),
   two: require('./imagefile/2.jpg'),
   three: require('./imagefile/3.jpg'),
+
+  arrow: require('./imagefile/arrow.png'),
+  unionPay: require('./imagefile/unionPay.png'),
+  alipay: require('./imagefile/alipay.png'),
+  wechat: require('./imagefile/wechat.png')
 }

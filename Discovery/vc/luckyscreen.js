@@ -67,11 +67,11 @@ export default class Lucky extends Component {
                     {this._renderHeader()}
                     <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
                         {this._renderTypes()}
-                        <TouchableOpacity>
+                        {/*<TouchableOpacity>
                             <View style={{ height: px2dp(90), paddingHorizontal: 10 }}>
                                 <Image source={Images.ad1} style={{ height: px2dp(90), width: width - 20, resizeMode: 'cover' }} />
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
                     </View>
 
                     {/*#pragma mark - ('热门区域')*/}

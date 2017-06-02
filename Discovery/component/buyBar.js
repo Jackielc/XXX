@@ -49,7 +49,7 @@ export default class BuyBar extends Component {
 
         return (
             isIOS ? (
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={this.props.onPress.bind(this)}>
                     {item()}
                 </TouchableWithoutFeedback>
             ) : (
